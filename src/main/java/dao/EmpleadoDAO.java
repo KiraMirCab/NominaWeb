@@ -101,6 +101,41 @@ public ArrayList<Empleado> leeTablaEmpleados() {
 }
 
 /**
+ * Este método busca por un dni el empleado y lo devuelve 
+ * @param dni
+ * @return empleado
+ */
+public Empleado buscarEmpleado(String dni) {
+	Empleado emp = new Empleado();
+	
+	try {
+		connection = obtenerConexion();
+		connection.setAutoCommit(false);
+		st = connection.prepareStatement("SELECT nombre, sexo, categoria, anyos FROM empleados WHERE id = '"+dni+"'");
+		rs = st.executeQuery();
+		
+		String nombre = rs.getString(1);
+		char sexo = rs.getString(2).charAt(0);
+		int categoria = rs.getInt(3);
+		int anyos = rs.getInt(4);
+		emp = new Empleado(dni, nombre, sexo, categoria, anyos);
+		
+	} catch (DatosNoCorrectosException e) {
+		System.out.println("Datos incorrectos, no se puede crear un empleado");
+	} catch (SQLException e) {
+		try {
+			System.out.println("Ocurrió algún error al conectar u operar con la BD");
+			connection.rollback();
+			e.printStackTrace();
+			} catch (SQLException e1) {
+				System.out.println("Ocurrió algún error al hacer rollback");
+				e.printStackTrace();
+			}
+	}
+	return emp;
+}
+
+/**
  * Este método encuentra el empleado en la tabla por el dni y actualiza los datos del empleado
  * en las dos tablas
  * @param empleado

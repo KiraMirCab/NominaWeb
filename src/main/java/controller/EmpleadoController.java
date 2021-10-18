@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -58,11 +57,11 @@ public class EmpleadoController extends HttpServlet {
 				break;
 				
 			case("actualizar"):
-				System.out.println("Usted a presionado la opcion de actualizar los datos de un empleado");
+				System.out.println("Usted ha elegido la opcion de actualizar los datos de un empleado");
 				rd = request.getRequestDispatcher("/views/actualizar.jsp");
 				rd.forward(request, response);
 		    	break;
-		}			
+		}
 				
 }
 
@@ -115,6 +114,18 @@ public class EmpleadoController extends HttpServlet {
 					e.printStackTrace();
 				}
 				break;
+				
+			case("meditar"):
+				dni = request.getParameter("dni");
+		    	System.out.println("Editar por dni: " + dni);
+		    	EmpleadoDAO emp1DAO = new EmpleadoDAO();
+		    	Empleado emp = new Empleado();
+		    	emp = emp1DAO.buscarEmpleado(dni);
+		    	System.out.println(emp);
+		    	request.setAttribute("emp", emp);
+		    	rd = request.getRequestDispatcher("/views/actualizar.jsp");
+		    	rd.forward(request, response);
+		    	break;			
 		}
 	}
 }

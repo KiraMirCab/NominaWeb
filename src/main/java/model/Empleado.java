@@ -28,6 +28,11 @@ public class Empleado {
 	}
 	
 	
+	public Empleado() {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public String getDni() {
 		return dni;
 	}

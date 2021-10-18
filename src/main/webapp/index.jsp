@@ -18,14 +18,14 @@
    <tr>
     <td>
     Actualizar los datos de un empleado.
-    <form action="empleados" method="get">
+    <form >
     	<label>DNI</label>
-    	<input type="text" name="dni" size="50" value="${emp.dni}">
-    	<a href="empleados?opcion=actualizar">Actualizar</a>
-    </form>
-    
-    </td>
-   
+    	<input type="text" name="dni" size="50">
+    	<a href="empleados?opcion=meditar&dni=${dni}">
+        	Actualizar
+      	</a>
+    </form>    
+   </td>
   </tr>
 </table>
 </body>

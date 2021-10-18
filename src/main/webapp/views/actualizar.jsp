@@ -11,11 +11,11 @@
 <h1>Actualizar los datos de un empleado</h1>
  <form action="empleados" method="post">
   <c:set var="emp" value="${emp}"></c:set>
-  <input type="hidden" name="opcion" value="actualizar">
+  <input type="hidden" name="opcion" value="meditar">
   <table border="1">
    <tr>
     <td>DNI:</td>
-    <td><input type="text" name="id" size="50" value="${emp.id}"></td>
+    <td><input type="text" name="id" size="50" value="${emp.dni}"></td>
    </tr>
    <tr>
     <td>Nombre:</td>
