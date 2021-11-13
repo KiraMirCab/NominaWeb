@@ -20,8 +20,7 @@
 					un empleado</a></td>
 		</tr>
 		<tr>
-			<td><a href="empleados?opcion=actualizar"> Actualizar los
-					datos del empleado</a></td>
+			<td><a href="empleados?opcion=buscar"> Buscar empleados</a></td>
 		</tr>
 	</table>
 </body>
