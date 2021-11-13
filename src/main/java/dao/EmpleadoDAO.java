@@ -136,6 +136,34 @@ public Empleado buscarEmpleado(String dni) {
 }
 
 /**
+ * Este método busca el sarario de un empleado 
+ * @param dni
+ * @return salario
+ */
+public int getSalario(String dni) {
+	int sueldo = 0;
+	try {
+		connection = obtenerConexion();
+		connection.setAutoCommit(false);
+		st = connection.prepareStatement("SELECT sueldo FROM nominas WHERE dni='"+dni+"'");
+		rs = st.executeQuery();
+		 if(rs.next()){
+			 sueldo = rs.getInt(1);
+		 }
+	} catch (SQLException e) {
+		try {
+			System.out.println("Ocurrió algún error al conectar u operar con la BD");
+			connection.rollback();
+			e.printStackTrace();
+			} catch (SQLException e1) {
+				System.out.println("Ocurrió algún error al hacer rollback");
+				e.printStackTrace();
+			}
+	}
+	return sueldo;
+}
+
+/**
  * Este método encuentra el empleado en la tabla por el dni y actualiza los datos del empleado
  * en las dos tablas
  * @param empleado

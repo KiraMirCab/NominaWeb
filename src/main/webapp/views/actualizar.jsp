@@ -11,7 +11,7 @@
 <h1>Actualizar los datos de un empleado</h1>
  <form action="empleados" method="post">
   <c:set var="emp" value="${emp}"></c:set>
-  <input type="hidden" name="opcion" value="meditar">
+  <input type="hidden" name="opcion" value="actualizar">
   <table border="1">
    <tr>
     <td>DNI:</td>
