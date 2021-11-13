@@ -8,6 +8,7 @@
 <title>Salario</title>
 </head>
 <body>
+<a href="empleados?opcion=volver"><button> Volver </button></a>
 <h1>Ver salario de un empleado</h1>
 <form action="empleados" method="post">
 		<input type="hidden" name="opcion" value="mostrarSalario">

@@ -7,6 +7,7 @@
 <title>Alta empleado</title>
 </head>
 <body>
+<a href="empleados?opcion=volver"><button> Volver </button></a>
 <h1>Dar de alta un empleado</h1>
  <form action="empleados" method="post">
   <input type="hidden" name="opcion" value="alta">
@@ -32,7 +33,8 @@
     <td><input type="text" name="anyos" size="50"></td>
    </tr>
   </table>
-  <input type="submit" value="alta">
+  	<br>
+  <input type="submit" value=" Alta">
  </form>
 </body>
 </html>

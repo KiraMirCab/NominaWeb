@@ -8,6 +8,7 @@
 <title>Salario</title>
 </head>
 <body>
+<a href="empleados?opcion=volver"><button> Volver </button></a>
 <h1>Salario del empleado</h1>
  <table border="1">
   <tr>

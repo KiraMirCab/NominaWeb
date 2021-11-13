@@ -60,28 +60,22 @@ public class EmpleadoController extends HttpServlet {
 			rd.forward(request, response);
 			break;
 
-//		case ("listarPorNombre"):
-//			System.out.println("Usted a presionado la opcion listar por nombre");
-//			empDAO = new EmpleadoDAO();
-//			empleados = new ArrayList<>();
-//			ArrayList<Empleado> empleadosNombre = new ArrayList<>();
-//			empleados = empDAO.leeTablaEmpleados();
-//			for (Empleado emp : empleados)
-//				if (emp.getNombre().equalsIgnoreCase(nombre)) {
-//					empleadosNombre.add(emp);
-//				}
-//			request.setAttribute("empleados", empleadosNombre);
-//			rd = request.getRequestDispatcher("/views/listar.jsp");
-//			rd.forward(request, response);
-//			break;
+		case ("listar"):
+			System.out.println("Usted a presionado la opcion listar a todos los empleados");
+			empDAO = new EmpleadoDAO();
+			empleados = new ArrayList<>();
+			empleados = empDAO.leeTablaEmpleados();
+			request.setAttribute("empleados", empleados);
+			rd = request.getRequestDispatcher("/views/listar.jsp");
+			rd.forward(request, response);
+			break;
 
-		case ("actualizar"):
-			System.out.println("Usted ha elegido la opcion de actualizar los datos de un empleado");
-			rd = request.getRequestDispatcher("/views/actualizar.jsp");
+		case ("volver"):
+			System.out.println("Volvemos al inicio");
+			rd = request.getRequestDispatcher("/index.jsp");
 			rd.forward(request, response);
 			break;
 		}
-
 	}
 
 	/**
@@ -96,71 +90,89 @@ public class EmpleadoController extends HttpServlet {
 		EmpleadoDAO empDAO;
 		ArrayList<Empleado> empleados;
 		Empleado emp;
+		String mensajeError;
 
 		switch (opcion) {
-		case ("alta"):
+		case ("alta"): //recogemos los datos del formulario, creamos un empleado 
+						//y lo guardamos en la BD
 			empDAO = new EmpleadoDAO();
 			String dni = request.getParameter("dni");
 			String nombre = request.getParameter("nombre");
 			char sexo = request.getParameter("sexo").charAt(0);
-			int categoria = Integer.parseInt(request.getParameter("categoria"));
-			int anyos = Integer.parseInt(request.getParameter("anyos"));
 
 			try {
+				int categoria = Integer.parseInt(request.getParameter("categoria"));
+				int anyos = Integer.parseInt(request.getParameter("anyos"));
 				emp = new Empleado(dni, nombre, sexo, categoria, anyos);
 				empDAO.altaEmpleado(emp);
 				rd = request.getRequestDispatcher("/index.jsp");
 				rd.forward(request, response);
+			} catch (NumberFormatException e){
+				mensajeError = "Categoría y años deben ser numericos";
+				request.setAttribute("mensajeError", mensajeError);
+				rd = request.getRequestDispatcher("/views/error.jsp");
+				rd.forward(request, response);
 			} catch (DatosNoCorrectosException e) {
-				System.out.println("No se ha podido crear un empleado");
-				e.printStackTrace();
+				mensajeError = "Se ha producido un error al introducir los datos de empleado";
+				request.setAttribute("mensajeError", mensajeError);
+				rd = request.getRequestDispatcher("/views/error.jsp");
+				rd.forward(request, response);
 			}
 			break;
 
-		case ("listar"):
-			System.out.println("Usted a presionado la opcion listar a todos los empleados");
+		case ("vamosAactualizar"): //recoge el dni del empleado y lo pasa 
+									//al formulario de actualizar empleado 
+			dni = request.getParameter("dni");
 			empDAO = new EmpleadoDAO();
-			empleados = new ArrayList<>();
-			empleados = empDAO.leeTablaEmpleados();
-			request.setAttribute("empleados", empleados);
-			rd = request.getRequestDispatcher("/views/listar.jsp");
+			emp = empDAO.buscarEmpleado(dni);
+			request.setAttribute("emp", emp);
+			rd = request.getRequestDispatcher("/views/actualizar.jsp");
 			rd.forward(request, response);
 			break;
 
-		case ("actualizar"):
+		case ("actualizar"):	//recoge los datos del empleado nuevos
+								//y actualiza la BD
 			empDAO = new EmpleadoDAO();
 
 			dni = request.getParameter("dni");
 			nombre = request.getParameter("nombre");
 			sexo = request.getParameter("sexo").charAt(0);
-			categoria = Integer.parseInt(request.getParameter("categoria"));
-			anyos = Integer.parseInt(request.getParameter("anyos"));
 
 			try {
+				int categoria = Integer.parseInt(request.getParameter("categoria"));
+				int anyos = Integer.parseInt(request.getParameter("anyos"));
 				emp = new Empleado(nombre, dni, sexo, categoria, anyos);
 				empDAO.actualizaEmpleado(emp);
 				System.out.println("Registro actualizado satisfactoriamente...");
 				rd = request.getRequestDispatcher("/index.jsp");
 				rd.forward(request, response);
+			} catch (NumberFormatException e){
+				mensajeError = "Categoría y años deben ser numericos";
+				request.setAttribute("mensaje", mensajeError);
+				rd = request.getRequestDispatcher("/views/error.jsp");
+				rd.forward(request, response);
 			} catch (DatosNoCorrectosException e) {
-				System.out.println("No se ha podido crear un empleado");
-				e.printStackTrace();
+				mensajeError = "Se ha producido un error al introducir los datos de empleado";
+				request.setAttribute("mensajeError", mensajeError);
+				rd = request.getRequestDispatcher("/views/error.jsp");
+				rd.forward(request, response);
 			}
 			break;
 
-		case ("mostrarSalario"):
+		case ("mostrarSalario"):	//recoge el dni del empleado, busca su salario
+									// en la BD y envia los datos a la vista
 			dni = request.getParameter("dni");
 			System.out.println("Mostrar salario del empleado con dni: " + dni);
 			empDAO = new EmpleadoDAO();
 			int salario = empDAO.getSalario(dni);
-			System.out.println(salario);
 			request.setAttribute("dni", dni);
 			request.setAttribute("salario", salario);
 			rd = request.getRequestDispatcher("/views/mostrarSalario.jsp");
 			rd.forward(request, response);
 			break;
 
-		case ("buscarEmpleadosDNI"):
+		case ("buscarEmpleadosDNI"):	//recoge el dni, busca el empleado en la BD
+										// y envía sus datos a la vista
 			dni = request.getParameter("dni");
 			emp = new Empleado();
 			empleados = new ArrayList<>();
@@ -172,7 +184,8 @@ public class EmpleadoController extends HttpServlet {
 			rd.forward(request, response);
 			break;
 
-		case ("buscarEmpleadosNombre"):
+		case ("buscarEmpleadosNombre"):	//recoge un string, busca todos los empleados de la BD
+										//cuyo nombre contiene este string y los pasa a la vista
 			nombre = request.getParameter("nombre");
 			empleados = new ArrayList<>();
 			empDAO = new EmpleadoDAO();
@@ -182,7 +195,8 @@ public class EmpleadoController extends HttpServlet {
 			rd.forward(request, response);
 			break;
 
-		case ("buscarEmpleadosSexo"):
+		case ("buscarEmpleadosSexo"):	//recoge el sexo, busca todos los empleados de la BD
+								//que tienen el sexo indicado y los pasa a la vista
 			String sex = request.getParameter("sexo");
 			empleados = new ArrayList<>();
 			empDAO = new EmpleadoDAO();
@@ -192,8 +206,9 @@ public class EmpleadoController extends HttpServlet {
 			rd.forward(request, response);
 			break;
 
-		case ("buscarEmpleadosCategoria"):
-			categoria = Integer.parseInt(request.getParameter("categoria"));
+		case ("buscarEmpleadosCategoria"):	//recoge la categoria, busca todos los empleados de la BD
+										//que tienen la misma categoria y los pasa a la vista
+			int categoria = Integer.parseInt(request.getParameter("categoria"));
 			empleados = new ArrayList<>();
 			empDAO = new EmpleadoDAO();
 			empleados = empDAO.buscarEmpleadoCategoria(categoria);
@@ -202,8 +217,9 @@ public class EmpleadoController extends HttpServlet {
 			rd.forward(request, response);
 			break;
 
-		case ("buscarEmpleadosAnyos"):
-			anyos = Integer.parseInt(request.getParameter("anyos"));
+		case ("buscarEmpleadosAnyos"):	//recoge los años, busca todos los empleados de la BD
+			//que tienen el mismo numero de años trabajados y los pasa a la vista
+			int anyos = Integer.parseInt(request.getParameter("anyos"));
 			empleados = new ArrayList<>();
 			empDAO = new EmpleadoDAO();
 			empleados = empDAO.buscarEmpleadoAnyos(anyos);

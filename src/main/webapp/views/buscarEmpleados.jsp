@@ -7,6 +7,7 @@
 <title>Buscar empleados</title>
 </head>
 <body>
+<a href="empleados?opcion=volver"><button> Volver </button></a>
 	<h1>Buscar empleados</h1>
 	<form action="empleados" method="post">
 		<input type="hidden" name="opcion" value="buscarEmpleadosDNI">

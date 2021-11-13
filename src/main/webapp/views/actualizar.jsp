@@ -8,6 +8,7 @@
 <title>Actualizar un empleado</title>
 </head>
 <body>
+<a href="empleados?opcion=volver"><button> Volver </button></a>
 <h1>Actualizar los datos de un empleado</h1>
  <form action="empleados" method="post">
   <c:set var="emp" value="${emp}"></c:set>
